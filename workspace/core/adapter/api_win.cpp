@@ -1,3 +1,4 @@
+#ifdef GUILITE_ON
 #if (defined _WIN32) || (defined WIN32) || (defined _WIN64) || (defined WIN64)
 
 #include "../../core_include/api.h"
@@ -58,7 +59,8 @@ typedef struct _timer_manage
         int state; /* on or off */
         int interval;
         int elapse; /* 0~interval */
-        void (* timer_proc) (void* ptmr, void* parg);
+        void (* timer_proc) (void* param);
+		void* param;
     }timer_info[MAX_TIMER_CNT];
 
     void (* old_sigfunc)(int);
@@ -81,7 +83,7 @@ DWORD WINAPI timer_routine(LPVOID lpParam)
 			if(timer_manage.timer_info[i].elapse == timer_manage.timer_info[i].interval)
 			{
 				timer_manage.timer_info[i].elapse = 0;
-				timer_manage.timer_info[i].timer_proc(0, 0);
+				timer_manage.timer_info[i].timer_proc(timer_manage.timer_info[i].param);
 			}
 		}
 		Sleep(TIMER_UNIT);
@@ -103,7 +105,7 @@ static int init_mul_timer()
     return 1;
 }
 
-static int set_a_timer(int interval, void (* timer_proc) (void* ptmr, void* parg))
+static int set_a_timer(int interval, void (* timer_proc) (void* param), void* param)
 {
 	init_mul_timer();
 
@@ -121,6 +123,7 @@ static int set_a_timer(int interval, void (* timer_proc) (void* ptmr, void* parg
         }
         memset(&timer_manage.timer_info[i], 0, sizeof(timer_manage.timer_info[i]));
         timer_manage.timer_info[i].timer_proc = timer_proc;
+		timer_manage.timer_info[i].param = param;
         timer_manage.timer_info[i].interval = interval;
         timer_manage.timer_info[i].elapse = 0;
         timer_manage.timer_info[i].state = 1;
@@ -198,14 +201,14 @@ unsigned int get_cur_thread_id()
 	return GetCurrentThreadId();
 }
 
-void register_timer(int milli_second,void func(void* ptmr, void* parg))
+void register_timer(int milli_second,void func(void* param), void* param)
 {
-	set_a_timer(milli_second/TIMER_UNIT,func);
+	set_a_timer(milli_second/TIMER_UNIT,func, param);
 }
 
 long get_time_in_second()
 {
-	return time(0);
+	return (long)time(0);
 }
 
 T_TIME get_time()
@@ -392,4 +395,5 @@ int c_fifo::write(void* buf, int len)
 	return i;
 }
 
+#endif
 #endif

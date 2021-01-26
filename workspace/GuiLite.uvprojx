@@ -388,24 +388,9 @@
               <FilePath>.\core\bitmap.cpp</FilePath>
             </File>
             <File>
-              <FileName>cmd_target.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\core\cmd_target.cpp</FilePath>
-            </File>
-            <File>
               <FileName>display.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\core\display.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>rect.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\core\rect.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>surface.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\core\surface.cpp</FilePath>
             </File>
             <File>
               <FileName>theme.cpp</FileName>
